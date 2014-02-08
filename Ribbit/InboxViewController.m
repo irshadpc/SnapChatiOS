@@ -105,6 +105,20 @@
         [self.moviePlayer setFullscreen:YES animated:YES];
     }
     
+    // Delete it
+    NSMutableArray *recipientsIds = [NSMutableArray arrayWithArray:[self.selectedMessage objectForKey:@"recipientsIds"]];
+    NSLog(@"Recipients: %@", recipientsIds);
+    if ([recipientsIds count] == 1) {
+        //Last recipient -> delete it
+        [self.selectedMessage deleteInBackground];
+    }
+    else {
+        // Remove the recipient and save it
+        [recipientsIds removeObject:[[PFUser currentUser] objectId]]; //removes locally
+        [self.selectedMessage setObject:recipientsIds forKey:@"recipientsIds"]; //save modified table/PFObject for backend
+        [self.selectedMessage saveInBackground]; //removes from backend
+    }
+    
 }
 
 
